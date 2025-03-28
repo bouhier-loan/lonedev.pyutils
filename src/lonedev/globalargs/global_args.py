@@ -89,4 +89,6 @@ class GlobalArgs:
 
     @classmethod
     def __class_getitem__(cls, item) -> Any:
-        return cls[item]
+        """Return the value of the argument with the given key."""
+        cls._parse_args()
+        return getattr(cls().parsed_args, item)

@@ -1,2 +1,2 @@
 """Manage global arguments for the command line interface."""
-import lonedev.globalargs.global_args
+from lonedev.globalargs.global_args import GlobalArgs, FlagType
