@@ -1,0 +1,26 @@
+[project]
+name = "lonedev.pyutils"
+version = "0.0.1"
+authors = [
+    { name="Bouhier Loan", email="loan.bouhier@gmail.com" }
+]
+description = "A collection of utilities for Python development"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+    "rich>=13.9.4",
+]
+
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project.urls]
+Homepage = "https://github.com/bouhier-loan/lonedev.pyutils"
