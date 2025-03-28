@@ -1,6 +1,6 @@
 [project]
-name = "lonedev.pyutils"
-version = "0.0.2"
+name = "lonedev"
+version = "0.0.3"
 authors = [
     { name="Bouhier Loan", email="loan.bouhier@gmail.com" }
 ]
