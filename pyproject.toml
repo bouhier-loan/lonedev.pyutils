@@ -79,3 +79,8 @@ unfixable = ["F401", "F841"]
 
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11.2",
+]
