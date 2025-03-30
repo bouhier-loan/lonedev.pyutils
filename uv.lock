@@ -3,8 +3,8 @@ revision = 1
 requires-python = ">=3.12"
 
 [[package]]
-name = "lonedev-pyutils"
-version = "0.0.1"
+name = "lonedev"
+version = "0.0.4"
 source = { editable = "." }
 dependencies = [
     { name = "rich" },
