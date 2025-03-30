@@ -1,7 +1,11 @@
 """Logger module for projects using rich library."""
+import os
 
 from lonedev.globalargs import FlagType, GlobalArgs
 from lonedev.logger.logger import Logger
+
+if not os.path.exists('logs'):
+    os.makedirs('logs')
 
 GlobalArgs.add_argument(
     "--debug",

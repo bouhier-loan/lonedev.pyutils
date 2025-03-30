@@ -1,4 +1,5 @@
 """Logger module for logging messages with different severity levels."""
+
 import datetime
 
 from rich import console
@@ -15,37 +16,29 @@ class Logger:
     _debug_enabled: bool = False
     _console = console.Console(log_path=False)
 
-    _instance: "Logger" = None
     _log_file: str
+    _initialized: bool = False
 
-    prefix: str = "Global"
-    """Prefix for log messages."""
+    _prefix: str = "Global"
 
-    def __new__(cls) -> "Logger":
+    def __init__(self, name: str) -> None:
         """Create a new instance of the class if it does not exist."""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._log_file_path = (
-                GlobalArgs()["log_file"]
+        if not Logger._initialized:
+            Logger._log_file_path = (
+                f"logs/{GlobalArgs()["log_file"]}"
                 if GlobalArgs()["log_file"] != ""
-                else f"logs/{datetime.datetime.now().astimezone().isoformat()[:-6]}.log"
+                else f"logs/{
+                    datetime.datetime.now(tz=datetime.UTC).strftime('%Y-%m-%d_%H-%M-%S')
+                }.log"
             )
-            cls._debug_enabled = GlobalArgs()["debug_enabled"]
-            cls._file_logging_enabled = GlobalArgs()["file_logging_enabled"]
-        return cls._instance
+            Logger._debug_enabled = GlobalArgs()["debug_enabled"]
+            Logger._file_logging_enabled = GlobalArgs()["file_logging_enabled"]
+            Logger._initialized = True
 
-    @classmethod
-    def get_logger(cls, prefix: str) -> "Logger":
-        """
-        Get a logger instance with a specific prefix.
+        self._prefix = name
+        if Logger._max_prefix_length < len(self._prefix):
+            Logger._max_prefix_length = len(self._prefix)
 
-        :param prefix: Prefix for the logger
-        :return: Logger instance
-        """
-        logger = cls()
-        logger.prefix = prefix
-        cls._max_prefix_length = max(cls._max_prefix_length, len(prefix))
-        return logger
 
     def _log(self, message: str, level: str, level_color: str) -> None:
         """
@@ -56,18 +49,18 @@ class Logger:
         :param level_color: Color for the severity level
         :return: None
         """
-        Logger._max_prefix_length = max(Logger._max_prefix_length, len(self.prefix))
+        Logger._max_prefix_length = max(Logger._max_prefix_length, len(self._prefix))
 
         if Logger._file_logging_enabled:
             with open(Logger._log_file_path, "a") as log_file:
                 log_file.write(
                     f"[{
-                        datetime.datetime.now(tz=datetime.UTC)
-                        .astimezone()
-                        .isoformat()[:-6]
+                        datetime.datetime.now(tz=datetime.UTC).strftime(
+                            '%Y-%m-%d_%H-%M-%S'
+                        )
                     } "
                     f"[{level.upper()}] "
-                    f"{self.prefix} - "
+                    f"{self._prefix} - "
                     f"{message}"
                     f"\n",
                 )
@@ -75,7 +68,44 @@ class Logger:
         Logger._console.log(
             f"[[{level_color}]{level.upper()}[/{level_color}]]",
             f"{' ' * (8 - len(level))}"
-            f"[grey50]{self.prefix}[/grey50]"
-            f"{' ' * (Logger._max_prefix_length - len(self.prefix) + 1)}-",
+            f"[grey50]{self._prefix}[/grey50]"
+            f"{' ' * (Logger._max_prefix_length - len(self._prefix) + 1)}-",
             message,
         )
+
+    def log(self, message: str) -> None:
+        """
+        Log a message with the INFO severity level.
+
+        :param message: Message to log
+        :return: None
+        """
+        self._log(message, "info", "blue")
+
+    def debug(self, message: str) -> None:
+        """
+        Log a message with the DEBUG severity level.
+
+        :param message: Message to log
+        :return: None
+        """
+        if Logger._debug_enabled:
+            self._log(message, "debug", "green")
+
+    def warning(self, message: str) -> None:
+        """
+        Log a message with the WARNING severity level.
+
+        :param message: Message to log
+        :return: None
+        """
+        self._log(message, "warning", "yellow")
+
+    def error(self, message: str) -> None:
+        """
+        Log a message with the ERROR severity level.
+
+        :param message: Message to log
+        :return: None
+        """
+        self._log(message, "error", "red")
