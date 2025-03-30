@@ -1,2 +1,5 @@
 """Manage global arguments for the command line interface."""
-from lonedev.globalargs.global_args import GlobalArgs, FlagType
+
+from lonedev.globalargs.global_args import FlagType, GlobalArgs
+
+__all__ = ["FlagType", "GlobalArgs"]
