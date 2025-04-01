@@ -56,17 +56,19 @@ class Logger:
                 log_file.write(
                     f"[{
                         datetime.datetime.now(tz=datetime.UTC).strftime(
-                            '%Y-%m-%d_%H-%M-%S'
+                            '%Y-%m-%d %H:%M:%S'
                         )
-                    } "
+                    }] "
                     f"[{level.upper()}] "
-                    f"{self._prefix} - "
+                    f"{' ' * (8 - len(level))}"
+                    f"{self._prefix}"
+                    f"{' ' * (Logger._max_prefix_length - len(self._prefix) + 1)}- "
                     f"{message}"
                     f"\n",
                 )
 
         Logger._console.log(
-            f"[[{level_color}]{level.upper()}[/{level_color}]]",
+            f"[[{level_color}]{level.upper()}[/{level_color}]]"
             f"{' ' * (8 - len(level))}"
             f"[grey50]{self._prefix}[/grey50]"
             f"{' ' * (Logger._max_prefix_length - len(self._prefix) + 1)}-",
@@ -109,3 +111,8 @@ class Logger:
         :return: None
         """
         self._log(message, "error", "red")
+
+    @classmethod
+    def get_console(cls):
+        """Return the console object."""
+        return cls._console

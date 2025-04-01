@@ -20,6 +20,8 @@ dependencies = [
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[project.scripts]
+logger = "lonedev.logger._cli:app"
 
 [project.urls]
 Homepage = "https://github.com/bouhier-loan/lonedev.pyutils"

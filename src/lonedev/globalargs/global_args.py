@@ -92,3 +92,13 @@ class GlobalArgs:
         """Return the value of the argument with the given key."""
         cls._parse_args()
         return getattr(cls().parsed_args, key)
+
+    def __repr__(self) -> str:
+        """Return the string representation of the class."""
+        self._parse_args()
+        return repr(self.parsed_args)
+
+    @classmethod
+    def get_parser(cls) -> argparse.ArgumentParser:
+        """Return the parser object."""
+        return cls()._parser
